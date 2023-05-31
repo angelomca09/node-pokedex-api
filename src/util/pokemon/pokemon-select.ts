@@ -2,10 +2,7 @@ export const noStats = {
   id: true,
   name: true,
   pokeDex: true,
-  url: true,
-  types: {
-    select: { type: { select: { name: true } } }
-  }
+  icon: true,
 }
 
 export const completeSelect = {
@@ -13,6 +10,7 @@ export const completeSelect = {
   name: true,
   pokeDex: true,
   url: true,
+  icon: true,
   hp: true,
   attack: true,
   defense: true,

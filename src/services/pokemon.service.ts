@@ -22,7 +22,7 @@ async function getAllPokemons(page: number = 1, maxResults: number = 15, name: s
     }
   })
 
-  return allPokemons.map(pokemon => ({ ...pokemon, types: pokemon.types.map(onlyTypeNames) }))
+  return allPokemons
 }
 
 async function getPokemon(pokemonId: string) {
