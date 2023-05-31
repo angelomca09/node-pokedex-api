@@ -15,6 +15,7 @@ model Pokemon {
   pokeDex String         @unique
   name    String
   url     String?
+  icon    String?
   total   Int
   hp      Int
   attack  Int

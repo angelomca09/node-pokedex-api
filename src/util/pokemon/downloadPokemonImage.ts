@@ -6,18 +6,27 @@ import axios from "axios"
 
 const pump = promisify(pipeline);
 
-export async function downloadPokemonImage(pokeDex: number) {
-  const sourceUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeDex}.png`
+export async function downloadPokemonImages(pokeDex: number) {
 
-  const sourceResult = await axios.get(sourceUrl, { responseType: "stream" });
+  const baseUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions"
 
-  const filename = `${pokeDex}.png`;
+  const animatedUrl = baseUrl.concat(`/generation-v/black-white/animated/${pokeDex}.gif`)
+  const iconUrl = baseUrl.concat(`/generation-vii/icons/${pokeDex}.png`)
 
-  const filePath = resolve(__dirname, "../../../images", filename)
+  const animatedResult = await axios.get(animatedUrl, { responseType: "stream" });
+  const iconResult = await axios.get(iconUrl, { responseType: "stream" });
 
-  const writeStream = createWriteStream(filePath);
+  const animatedFilename = `${pokeDex}.gif`;
+  const iconFilename = `${pokeDex}.png`;
 
-  await pump(sourceResult.data, writeStream);
+  const animatedFilePath = resolve(__dirname, "../../../images/animated", animatedFilename)
+  const iconFilePath = resolve(__dirname, "../../../images/icons", iconFilename)
 
-  return `images/${filename}`
+  const animatedWriteStream = createWriteStream(animatedFilePath);
+  const iconWriteStream = createWriteStream(iconFilePath);
+
+  await pump(animatedResult.data, animatedWriteStream);
+  await pump(iconResult.data, iconWriteStream);
+
+  return [`images/animated/${animatedFilename}`, `images/icons/${iconFilename}`]
 }

@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma";
 import fs from "fs"
-import { downloadPokemonImage } from "./pokemon/downloadPokemonImage";
+import { downloadPokemonImages } from "./pokemon/downloadPokemonImage";
 
 export async function populateDB() {
 
@@ -26,9 +26,12 @@ export async function populateDB() {
     })
 
     // Delete the key 'types' from pokemon object
-    delete pokemon.types
+    delete pokemon.types;
 
-    pokemon.url = await downloadPokemonImage(+pokemon.pokeDex)
+    const [url, icon] = await downloadPokemonImages(+pokemon.pokeDex)
+
+    pokemon.url = url
+    pokemon.icon = icon
 
     await prisma.pokemon.create({
       data: pokemon
